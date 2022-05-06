@@ -72,7 +72,6 @@ export default {
 		async loadUsers(refresh = false) {
 			this.isLoading = true
 			try {
-				console.log('ee')
 				await this.$store.dispatch('loadUsers', {
 					forceRefresh: refresh,
 				})

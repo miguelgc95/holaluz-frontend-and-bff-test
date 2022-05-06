@@ -1,8 +1,8 @@
-import clients from '../cache/clients.json'
+import { getAllUsers } from '../simulateApiCalls'
 
 export default {
-	// readUsersFronJSON() {
 	loadUsers(context) {
-		context.commit('loadUsers', clients)
+		const users = getAllUsers()
+		context.commit('loadUsers', users)
 	},
 }

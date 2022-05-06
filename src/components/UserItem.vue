@@ -4,7 +4,7 @@
 		<h4>CUPS: {{ cups }}</h4>
 
 		<div class="actions">
-			<base-button link :to="'/cups-info/:' + cups">View CUPS Details</base-button>
+			<base-button link :to="'/info/' + cups">View Details</base-button>
 		</div>
 	</li>
 </template>

@@ -3,6 +3,7 @@
 		<base-dialog :show="!!error" title="An error occurred!" @close="handleError">
 			<p>{{ error }}</p>
 		</base-dialog>
+		<back-button />
 		<base-card>
 			<div v-if="isLoading">
 				<base-spinner></base-spinner>
@@ -42,6 +43,7 @@
 import { getUserByCups, getOneCups } from '../simulateApiCalls'
 
 import BaseCard from '@/components/ui/BaseCard.vue'
+import BackButton from '@/components/ui/BackButton.vue'
 export default {
 	data() {
 		return {
@@ -52,7 +54,7 @@ export default {
 			typeOfDisscount: '',
 		}
 	},
-	components: { BaseCard },
+	components: { BaseCard, BackButton },
 	computed: {
 		cupsHasBeenFound() {
 			return !this.isLoading && this.cups

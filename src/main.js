@@ -1,5 +1,8 @@
 import { createApp } from 'vue'
 
+import BootstrapVue3 from 'bootstrap-vue-3'
+import BootstrapIcon from '@dvuckovic/vue3-bootstrap-icons'
+
 import App from './App.vue'
 import router from './router'
 import store from './store'
@@ -11,6 +14,10 @@ import BaseSpinner from './components/ui/BaseSpinner.vue'
 import BaseDialog from './components/ui/BaseDialog.vue'
 
 const app = createApp(App)
+
+app.use(BootstrapVue3)
+
+app.component('BootstrapIcon', BootstrapIcon)
 
 app.use(router)
 app.use(store)

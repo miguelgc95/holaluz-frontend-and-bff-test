@@ -8,8 +8,28 @@
 				<base-spinner></base-spinner>
 			</div>
 			<div v-else-if="cupsHasBeenFound">
-				<h2>{{ user.full_name }}</h2>
-				<h2>{{ user.cups }}</h2>
+				<div>
+					<h1 v-if="canJoin">{{ user.full_name }} can join our rooftop revolution!</h1>
+					<h1 v-else>{{ user.full_name }} cannot join our rooftop revolution :(</h1>
+				</div>
+				<div>
+					<h2 v-if="this.typeOfDisscount === 'standard' && this.user.building_type !== 'house'">Special disccount: 12%</h2>
+					<h2 v-else-if="this.typeOfDisscount === 'basic' && this.user.building_type !== 'house'">Basic disccount: 5%</h2>
+					<h2 v-else>No disccount avaliable</h2>
+				</div>
+				<base-card>
+					<h2>{{ user.full_name }}</h2>
+					<h3>Adress: {{ user.address }}</h3>
+					<h3>Role: {{ user.role }}</h3>
+					<h3>Building type: {{ user.building_type }}</h3>
+				</base-card>
+				<base-card>
+					<h2>CUPS: {{ cups?.cups }}</h2>
+					<h3>Tariff: {{ cups?.tariff }}</h3>
+					<h3>Invoiced amount: {{ cups?.invoiced_amount }}</h3>
+					<h3>Power: {{ cups?.power?.p1 }} {{ cups?.power?.p2 }}</h3>
+					<h3>Neighbors: {{ cups?.neighbors }}</h3>
+				</base-card>
 			</div>
 			<div v-else>
 				<h2>No matching CUPS found</h2>
@@ -19,7 +39,7 @@
 </template>
 
 <script>
-import { getUserByCups } from '../simulateApiCalls'
+import { getUserByCups, getOneCups } from '../simulateApiCalls'
 
 import BaseCard from '@/components/ui/BaseCard.vue'
 export default {
@@ -29,19 +49,23 @@ export default {
 			error: null,
 			user: {},
 			cups: {},
+			typeOfDisscount: '',
 		}
 	},
 	components: { BaseCard },
 	computed: {
 		cupsHasBeenFound() {
-			return !this.isLoading && this.user?.cups
+			return !this.isLoading && this.cups
+		},
+		canJoin() {
+			return this.user.building_type === 'house' && this.cups?.neighbors.length > 0 ? true : false
 		},
 	},
 	methods: {
-		async requestUserByCups() {
+		async requestUserByCups(cups) {
 			this.isLoading = true
 			try {
-				this.user = getUserByCups(this.$route.params.cups)
+				this.user = await getUserByCups(cups)
 			} catch (error) {
 				this.error = error.message || 'Something went wrong!'
 			}
@@ -52,7 +76,14 @@ export default {
 		},
 	},
 
-	created() {
+	async created() {
+		this.isLoading = true
+		try {
+			this.cups = getOneCups(this.$route.params.cups)
+		} catch (error) {
+			this.error = error.message || 'Something went wrong!'
+		}
+
 		if (this.$store.getters['users'].length > 0) {
 			const user = this.$store.getters['users'].find(user => user.cups === this.$route.params.cups)
 			if (user) {
@@ -61,8 +92,25 @@ export default {
 				this.error = 'CUPS not found'
 			}
 		} else {
-			this.requestUserByCups()
+			this.requestUserByCups(this.$route.params.cups)
 		}
+
+		let invoicedAddition = 0
+		let neighborPowerIsLower = true
+		this.cups.neighbors.forEach(neighborCups => {
+			const neighbor = getOneCups(neighborCups)
+			invoicedAddition = invoicedAddition + parseFloat(neighbor.invoiced_amount)
+			neighborPowerIsLower = neighborPowerIsLower * (this.cups.power?.p1 > neighbor.power?.p1 && this.cups.power.p1 > neighbor.power.p1)
+		})
+		if (invoicedAddition > 100) {
+			this.typeOfDisscount = 'special'
+		} else if (neighborPowerIsLower) {
+			this.typeOfDisscount = 'basic'
+		} else {
+			this.typeOfDisscount = 'standard'
+		}
+
+		this.isLoading = false
 	},
 }
 </script>

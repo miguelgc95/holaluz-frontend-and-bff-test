@@ -14,3 +14,7 @@ export const getUserByCups = cups => {
 export const getAllSupplyPoints = () => {
 	return supplyPoints
 }
+
+export const getOneCups = cups => {
+	return supplyPoints.find(cupsItem => cupsItem.cups === cups)
+}

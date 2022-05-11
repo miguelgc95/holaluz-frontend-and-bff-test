@@ -1,7 +1,6 @@
 {
 	"name": "holaluz-frontend-and-bff-test",
 	"version": "0.1.0",
-	"root": true,
 	"private": true,
 	"workspaces": [
 		"packages/*"

@@ -4,7 +4,7 @@
 			<p>{{ error }}</p>
 		</base-dialog>
 		<section>
-			<cups-filter @change-filter="setFilters"></cups-filter>
+			<cups-filter @set-filter="setFilteredUsers"></cups-filter>
 		</section>
 		<section>
 			<base-card>
@@ -15,7 +15,12 @@
 					<base-spinner></base-spinner>
 				</div>
 				<ul v-else-if="thereAreUsers">
-					<user-item v-for="user in users" :key="user.cups" :cups="user.cups" :full_name="user.full_name"></user-item>
+					<div v-if="this.filter === ''">
+						<user-item v-for="user in users" :key="user.cups" :cups="user.cups" :full_name="user.full_name"></user-item>
+					</div>
+					<div v-else>
+						<user-item v-for="user in filteredUsers" :key="user.cups" :cups="user.cups" :full_name="user.full_name"></user-item>
+					</div>
 				</ul>
 				<h3 v-else>No users found.</h3>
 			</base-card>
@@ -36,27 +41,13 @@ export default {
 		return {
 			isLoading: false,
 			error: null,
-			cupInputFilter: '',
+			filter: '',
+			filteredUsers: this.$store.getters['users'],
 		}
 	},
 	computed: {
 		users() {
 			return this.$store.getters['users']
-		},
-		filteredUsers() {
-			const users = this.$store.getters['users']
-			return users.filter(coach => {
-				if (this.activeFilters.frontend && coach.areas.includes('frontend')) {
-					return true
-				}
-				if (this.activeFilters.backend && coach.areas.includes('backend')) {
-					return true
-				}
-				if (this.activeFilters.career && coach.areas.includes('career')) {
-					return true
-				}
-				return false
-			})
 		},
 		thereAreUsers() {
 			return !this.isLoading && this.$store.getters['users'].length > 0
@@ -66,6 +57,11 @@ export default {
 		this.loadUsers()
 	},
 	methods: {
+		setFilteredUsers(cups) {
+			this.filter = cups
+			this.filteredUsers = this.$store.getters['users'].filter(user => user.cups.includes(cups))
+			console.log(this.filteredUsers)
+		},
 		setInputFilter(updatedFilters) {
 			this.activeFilters = updatedFilters
 		},

@@ -1,4 +1,4 @@
-import Client from '../models/clientsModel.js'
+import Client from '../models/clientModel.js'
 
 async function getAllClients(request, response) {
 	try {

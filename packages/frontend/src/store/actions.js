@@ -1,4 +1,4 @@
-import { getAllUsers } from '../simulateApiCalls'
+import { getAllUsers } from '../apiCalls'
 
 export default {
 	loadUsers(context) {

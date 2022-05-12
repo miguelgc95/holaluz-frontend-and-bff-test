@@ -60,7 +60,6 @@ export default {
 		setFilteredUsers(cups) {
 			this.filter = cups
 			this.filteredUsers = this.$store.getters['users'].filter(user => user.cups.includes(cups))
-			console.log(this.filteredUsers)
 		},
 		setInputFilter(updatedFilters) {
 			this.activeFilters = updatedFilters

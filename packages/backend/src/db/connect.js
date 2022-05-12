@@ -1,12 +1,12 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
-import config from '../config/index.js';
+import config from '../config/index.js'
 
 function connect() {
-    return mongoose.connect(config.db.url, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
+	return mongoose.connect(config.db.url, {
+		useNewUrlParser: true,
+		useUnifiedTopology: true,
+	})
 }
 
-export default connect;
+export default connect

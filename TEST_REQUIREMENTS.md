@@ -31,7 +31,7 @@ We need a landing page that given a CUPS search we display both its client and s
 
 - We will use the code you deliver to us for the pair programming step of the interview process.
 
-- You will find two `.json` files. You should tread each of them like they are returned by a different endpoint.
+- You will have to build a back for front usig nodeJS. You will find two `.json` files. You should tread each of them like they are returned by a different endpoint.
 
 ## Glossary
 

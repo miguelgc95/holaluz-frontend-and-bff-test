@@ -12,10 +12,8 @@ async function getAllClients(request, response) {
 
 async function getClientByCups(request, response) {
 	try {
-		const client = await Client.findOne({ cups: request.params.cups }).lean().exec()
-		console.log(client)
-
-		if (response) return response.status(200).send(client)
+		const client = await Client.findOne({ tariff: 'One price' }).lean().exec()
+		if (client) return response.status(200).send(client)
 		return response.status(400).send('error')
 	} catch (error) {
 		console.log(error)

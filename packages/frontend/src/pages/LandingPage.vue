@@ -54,7 +54,7 @@ export default {
 		},
 	},
 	created() {
-		this.loadUsers()
+		this.$store.getters['users'].length === 0 && this.loadUsers()
 	},
 	methods: {
 		setFilteredUsers(cups) {

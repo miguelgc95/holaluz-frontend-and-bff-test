@@ -1,19 +1,32 @@
 import axios from 'axios'
 
 export const getAllUsers = async () => {
-	const clients = await axios.get('http://localhost:3000/clients')
-	console.log(clients)
-	return clients
+	try {
+		const clients = await axios.get('http://localhost:3000/clients')
+		return clients.data
+	} catch (error) {
+		console.log(error)
+	}
 }
 
-// export const getUserByCups = cups => {
-// 	return clients.find(client => client.cups === cups)
-// }
+export const getUserByCups = async cups => {
+	try {
+		const client = await axios.get(`http://localhost:3000/clients/${cups}`)
+		return client.data
+	} catch (error) {
+		console.log(error)
+	}
+}
 
 // export const getAllSupplyPoints = () => {
 // 	return supplyPoints
 // }
 
-// export const getOneCups = cups => {
-// 	return supplyPoints.find(cupsItem => cupsItem.cups === cups)
-// }
+export const getOneCups = async cups => {
+	try {
+		const supplyPoint = await axios.get(`http://localhost:3000/supply-points/${cups}`)
+		return supplyPoint.data
+	} catch (error) {
+		console.log(error)
+	}
+}

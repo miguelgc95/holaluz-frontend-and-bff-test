@@ -12,10 +12,8 @@ async function getAllSupplyPoints(request, response) {
 
 async function getSupplyPointByCups(request, response) {
 	try {
-		const supplyPoint = await Client.findOne({ cups: request.params.cups }).lean().exec()
-		console.log(supplyPoint)
-
-		if (response) return response.status(200).send(supplyPoint)
+		const supplyPoint = await SupplyPoint.findOne({ cups: request.params.cups }).lean().exec()
+		if (supplyPoint) return response.status(200).send(supplyPoint)
 		return response.status(400).send('error')
 	} catch (error) {
 		console.log(error)

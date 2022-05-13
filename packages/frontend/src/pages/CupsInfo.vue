@@ -14,8 +14,8 @@
 					<h1 v-else>{{ user.full_name }} cannot join our rooftop revolution :(</h1>
 				</div>
 				<div>
-					<h2 v-if="this.typeOfDisscount === 'standard' && this.user.building_type !== 'house'">Special disccount: 12%</h2>
-					<h2 v-else-if="this.typeOfDisscount === 'basic' && this.user.building_type !== 'house'">Basic disccount: 5%</h2>
+					<h2 v-if="this.typeOfDisscount === 'special' && canJoin">Special disccount: 12%</h2>
+					<h2 v-else-if="this.typeOfDisscount === 'basic' && canJoin">Basic disccount: 5%</h2>
 					<h2 v-else>No disccount avaliable</h2>
 				</div>
 				<base-card>
@@ -40,7 +40,8 @@
 </template>
 
 <script>
-import { getUserByCups, getOneCups } from '../simulateApiCalls'
+import { getUserByCups, getOneCups } from '../apiCalls'
+// import { getOneCups, getUserByCups } from '../simulateApiCalls'
 
 import BaseCard from '@/components/ui/BaseCard.vue'
 import BackButton from '@/components/ui/BackButton.vue'
@@ -81,7 +82,7 @@ export default {
 	async created() {
 		this.isLoading = true
 		try {
-			this.cups = getOneCups(this.$route.params.cups)
+			this.cups = await getOneCups(this.$route.params.cups)
 		} catch (error) {
 			this.error = error.message || 'Something went wrong!'
 		}
@@ -99,14 +100,17 @@ export default {
 
 		let invoicedAddition = 0
 		let neighborPowerIsLower = true
-		this.cups.neighbors.forEach(neighborCups => {
-			const neighbor = getOneCups(neighborCups)
+
+		for (const neighborCups of this.cups.neighbors) {
+			const neighbor = await getOneCups(neighborCups)
 			invoicedAddition = invoicedAddition + parseFloat(neighbor.invoiced_amount)
 			neighborPowerIsLower = neighborPowerIsLower * (this.cups.power?.p1 > neighbor.power?.p1 && this.cups.power.p1 > neighbor.power.p1)
-		})
+		}
+
 		if (invoicedAddition > 100) {
 			this.typeOfDisscount = 'special'
 		} else if (neighborPowerIsLower) {
+			console.log('ee')
 			this.typeOfDisscount = 'basic'
 		} else {
 			this.typeOfDisscount = 'standard'

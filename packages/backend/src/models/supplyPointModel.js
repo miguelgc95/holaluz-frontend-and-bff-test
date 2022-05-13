@@ -3,30 +3,24 @@ import mongoose from 'mongoose'
 const SupplyPointSchema = new mongoose.Schema({
 	cups: {
 		require: true,
-		type: Number,
+		type: String,
 	},
-	tariff: [
-		{
-			require: true,
-			type: String,
-		},
-	],
-	invoiced_amount: [
-		{
-			require: true,
-			type: Number,
-		},
-	],
-	power: [
-		{
-			require: true,
-			type: {},
-		},
-	],
+	tariff: {
+		require: true,
+		type: String,
+	},
+	invoiced_amount: {
+		require: true,
+		type: String,
+	},
+	power: {
+		require: true,
+		type: {},
+	},
 	neighbors: [
 		{
 			require: true,
-			type: [Number],
+			type: String,
 		},
 	],
 })

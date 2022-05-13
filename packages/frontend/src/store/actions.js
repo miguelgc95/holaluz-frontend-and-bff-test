@@ -1,8 +1,8 @@
-import { getAllUsers } from '../simulateApiCalls'
+import { getAllUsers } from '../apiCalls'
 
 export default {
-	loadUsers(context) {
-		const users = getAllUsers()
+	async loadUsers(context) {
+		const users = await getAllUsers()
 		context.commit('loadUsers', users)
 	},
 }
